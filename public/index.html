@@ -13,19 +13,6 @@
 
   <main>
     <section class="panel">
-      <h2>Add a card</h2>
-      <form id="add-form">
-        <input type="text" id="title" placeholder="タイトル" required>
-        <textarea id="description" placeholder="説明（任意）"></textarea>
-        <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
-        <input type="text" id="created_by" placeholder="追加した人">
-        <select id="image_key"></select>
-        <img id="image-preview" class="image-preview hidden" alt="">
-        <button type="submit">追加</button>
-      </form>
-    </section>
-
-    <section class="panel">
       <h2>Random pick</h2>
       <div class="pick-controls">
         <label>
@@ -39,6 +26,19 @@
         <button id="pick-btn">引く</button>
       </div>
       <div id="picked" class="picked-area">まだ何も引いていません</div>
+    </section>
+
+    <section class="panel">
+      <h2>Add a card</h2>
+      <form id="add-form">
+        <input type="text" id="title" placeholder="タイトル" required>
+        <textarea id="description" placeholder="説明（任意）"></textarea>
+        <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
+        <input type="text" id="created_by" placeholder="追加した人">
+        <select id="image_key"></select>
+        <img id="image-preview" class="image-preview hidden" alt="">
+        <button type="submit">追加</button>
+      </form>
     </section>
 
     <section class="panel">
