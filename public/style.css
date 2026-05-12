@@ -137,14 +137,15 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 .card-image {
   width: 100%;
-  max-height: 200px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   margin: 0.5rem 0;
   background: var(--soft);
 }
 .picked-area .card-image {
-  max-height: 240px;
+  max-width: 320px;
   margin: 0.8rem auto;
+  display: block;
 }
 
 .card-meta {
@@ -247,3 +248,15 @@ ul { list-style: none; padding: 0; margin: 0; }
   background: var(--soft);
   color: var(--text);
 }
+
+.image-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  background: var(--soft);
+  border: 1px solid var(--border);
+  margin-top: 0.3rem;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.image-preview.hidden { display: none; }

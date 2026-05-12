@@ -20,6 +20,21 @@ function populateImageSelect(selectId) {
   ).join('');
 }
 
+function updateImagePreview(selectId, previewId) {
+  const select = document.getElementById(selectId);
+  const preview = document.getElementById(previewId);
+  if (!select || !preview) return;
+  const value = select.value;
+  if (value) {
+    preview.src = `/images/${encodeURIComponent(value)}`;
+    preview.classList.remove('hidden');
+  } else {
+    preview.src = '';
+    preview.classList.add('hidden');
+  }
+}
+
+
 // ---------- 取得 ----------
 async function fetchCards() {
   const res = await fetch(API_CARDS);
@@ -117,7 +132,9 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     body: JSON.stringify(payload),
   });
   e.target.reset();
+  updateImagePreview('image_key', 'image-preview'); // 追加：リセット後にプレビューも消す
   reloadAll();
+
 });
 
 // ---------- カード削除 ----------
@@ -138,6 +155,9 @@ function openEditModal(id) {
   document.getElementById('edit-category').value = card.category || '';
   document.getElementById('edit-created_by').value = card.created_by || '';
   document.getElementById('edit-image_key').value = card.image_key || '';
+
+  document.getElementById('edit-image_key').value = card.image_key || '';
+  updateImagePreview('edit-image_key', 'edit-image-preview'); // 追加：開いた時の初期画像を表示
 
   document.getElementById('edit-modal').classList.remove('hidden');
 }
@@ -235,4 +255,13 @@ function escapeHtml(str) {
 // ---------- 初期化 ----------
 populateImageSelect('image_key');
 populateImageSelect('edit-image_key');
+
+document.getElementById('image_key').addEventListener('change', () => {
+  updateImagePreview('image_key', 'image-preview');
+});
+document.getElementById('edit-image_key').addEventListener('change', () => {
+  updateImagePreview('edit-image_key', 'edit-image-preview');
+});
+
 reloadAll();
+fetchCards

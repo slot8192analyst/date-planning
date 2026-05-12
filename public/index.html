@@ -20,6 +20,7 @@
         <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
         <input type="text" id="created_by" placeholder="追加した人">
         <select id="image_key"></select>
+        <img id="image-preview" class="image-preview hidden" alt="">
         <button type="submit">追加</button>
       </form>
     </section>
@@ -72,6 +73,7 @@
         <input type="text" id="edit-created_by">
         <label>画像</label>
         <select id="edit-image_key"></select>
+        <img id="edit-image-preview" class="image-preview hidden" alt="">
         <div class="modal-actions">
           <button type="button" id="edit-cancel" class="ghost-btn">キャンセル</button>
           <button type="submit">保存</button>
