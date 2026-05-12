@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>デートカード</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>💝 デートカード</h1>
+
+  <section>
+    <h2>カードを追加</h2>
+    <form id="add-form">
+      <input type="text" id="title" placeholder="タイトル（例：水族館に行く）" required>
+      <textarea id="description" placeholder="メモ（任意）"></textarea>
+      <button type="submit">追加する</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>ランダムピック</h2>
+    <button id="pick-btn">1枚引く！</button>
+    <div id="picked"></div>
+  </section>
+
+  <section>
+    <h2>カード一覧</h2>
+    <ul id="card-list"></ul>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
