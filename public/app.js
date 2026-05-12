@@ -4,6 +4,23 @@ const API_VISITS = '/api/visits';
 let cardsCache = [];
 let visitsCache = [];
 
+// ---------- 画像選択肢（追加フォームと編集モーダルで共通） ----------
+const IMAGE_OPTIONS = [
+  { value: '', label: '画像なし' },
+  { value: 'aquarium.jpg', label: '水族館' },
+  { value: 'cafe.jpg', label: 'カフェ' },
+  { value: 'park.jpg', label: '公園' },
+  // 画像を追加するときはここに1行足すだけでOK
+];
+
+function populateImageSelect(selectId) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  select.innerHTML = IMAGE_OPTIONS.map(o =>
+    `<option value="${escapeHtml(o.value)}">${escapeHtml(o.label)}</option>`
+  ).join('');
+}
+
 // ---------- 取得 ----------
 async function fetchCards() {
   const res = await fetch(API_CARDS);
@@ -40,7 +57,7 @@ function renderCards() {
     btn.addEventListener('click', () => deleteCard(btn.dataset.id))
   );
   list.querySelectorAll('.edit-btn').forEach(btn =>
-    btn.addEventListener('click', () => editCard(btn.dataset.id))
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id))
   );
 }
 
@@ -77,7 +94,7 @@ function renderCategoryFilter() {
   select.value = current;
 }
 
-// ---------- 操作 ----------
+// ---------- リロード ----------
 async function reloadAll() {
   await Promise.all([fetchCards(), fetchVisits()]);
   renderCards();
@@ -85,6 +102,7 @@ async function reloadAll() {
   renderCategoryFilter();
 }
 
+// ---------- カード追加 ----------
 document.getElementById('add-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const payload = {
@@ -103,36 +121,58 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
   reloadAll();
 });
 
+// ---------- カード削除 ----------
 async function deleteCard(id) {
   if (!confirm('このカードを削除しますか？')) return;
   await fetch(`${API_CARDS}/${id}`, { method: 'DELETE' });
   reloadAll();
 }
 
-async function editCard(id) {
+// ---------- カード編集（モーダル） ----------
+function openEditModal(id) {
   const card = cardsCache.find(c => c.id == id);
-  const title = prompt('タイトル', card.title);
-  if (title === null) return;
-  const description = prompt('説明', card.description || '');
-  if (description === null) return;
-  const category = prompt('カテゴリ', card.category || '');
-  if (category === null) return;
-  const created_by = prompt('追加した人', card.created_by || '');
-  if (created_by === null) return;
-  const image_key = prompt('画像ファイル名（例: cafe.jpg、なしなら空欄）', card.image_key || '');
-  if (image_key === null) return;
+  if (!card) return;
 
+  document.getElementById('edit-id').value = card.id;
+  document.getElementById('edit-title').value = card.title || '';
+  document.getElementById('edit-description').value = card.description || '';
+  document.getElementById('edit-category').value = card.category || '';
+  document.getElementById('edit-created_by').value = card.created_by || '';
+  document.getElementById('edit-image_key').value = card.image_key || '';
+
+  document.getElementById('edit-modal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.add('hidden');
+}
+
+document.getElementById('edit-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const id = document.getElementById('edit-id').value;
+  const payload = {
+    title: document.getElementById('edit-title').value,
+    description: document.getElementById('edit-description').value,
+    category: document.getElementById('edit-category').value,
+    created_by: document.getElementById('edit-created_by').value,
+    image_key: document.getElementById('edit-image_key').value || null,
+  };
   await fetch(`${API_CARDS}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      title, description, category, created_by,
-      image_key: image_key || null,
-    }),
+    body: JSON.stringify(payload),
   });
+  closeEditModal();
   reloadAll();
-}
+});
 
+document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
+document.querySelector('#edit-modal .modal-backdrop').addEventListener('click', closeEditModal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeEditModal();
+});
+
+// ---------- 履歴削除 ----------
 async function deleteVisit(id) {
   if (!confirm('この履歴を削除しますか？')) return;
   await fetch(`${API_VISITS}/${id}`, { method: 'DELETE' });
@@ -194,4 +234,6 @@ function escapeHtml(str) {
 }
 
 // ---------- 初期化 ----------
+populateImageSelect('image_key');
+populateImageSelect('edit-image_key');
 reloadAll();

@@ -19,13 +19,7 @@
         <textarea id="description" placeholder="説明（任意）"></textarea>
         <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
         <input type="text" id="created_by" placeholder="追加した人">
-        <select id="image_key">
-          <option value="">画像なし</option>
-          <!-- 事前にアップロードした画像をここに追加 -->
-          <option value="aquarium.jpg">水族館</option>
-          <option value="cafe.jpg">カフェ</option>
-          <option value="park.jpg">公園</option>
-        </select>
+        <select id="image_key"></select>
         <button type="submit">追加</button>
       </form>
     </section>
@@ -62,7 +56,29 @@
       <ul id="history-list" class="history-list hidden"></ul>
     </section>
   </main>
-
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2>Edit Card</h2>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id">
+        <label>タイトル</label>
+        <input type="text" id="edit-title" required>
+        <label>説明</label>
+        <textarea id="edit-description"></textarea>
+        <label>カテゴリ / タグ</label>
+        <input type="text" id="edit-category">
+        <label>追加した人</label>
+        <input type="text" id="edit-created_by">
+        <label>画像</label>
+        <select id="edit-image_key"></select>
+        <div class="modal-actions">
+          <button type="button" id="edit-cancel" class="ghost-btn">キャンセル</button>
+          <button type="submit">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
