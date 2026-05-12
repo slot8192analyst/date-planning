@@ -22,6 +22,7 @@ function renderCards() {
     const li = document.createElement('li');
     li.innerHTML = `
       <strong>${escapeHtml(card.title)}</strong>
+      ${card.image_key ? `<img class="card-image" src="/images/${encodeURIComponent(card.image_key)}" alt="">` : ''}
       <div>${escapeHtml(card.description || '')}</div>
       <div class="card-meta">
         ${card.category ? 'CATEGORY: ' + escapeHtml(card.category) + ' / ' : ''}
@@ -91,6 +92,7 @@ document.getElementById('add-form').addEventListener('submit', async (e) => {
     description: document.getElementById('description').value,
     category: document.getElementById('category').value,
     created_by: document.getElementById('created_by').value,
+    image_key: document.getElementById('image_key').value || null,
   };
   await fetch(API_CARDS, {
     method: 'POST',
@@ -117,10 +119,16 @@ async function editCard(id) {
   if (category === null) return;
   const created_by = prompt('追加した人', card.created_by || '');
   if (created_by === null) return;
+  const image_key = prompt('画像ファイル名（例: cafe.jpg、なしなら空欄）', card.image_key || '');
+  if (image_key === null) return;
+
   await fetch(`${API_CARDS}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, description, category, created_by }),
+    body: JSON.stringify({
+      title, description, category, created_by,
+      image_key: image_key || null,
+    }),
   });
   reloadAll();
 }
@@ -153,6 +161,7 @@ document.getElementById('pick-btn').addEventListener('click', async () => {
   const picked = candidates[Math.floor(Math.random() * candidates.length)];
   area.innerHTML = `
     <strong>${escapeHtml(picked.title)}</strong>
+    ${picked.image_key ? `<img class="card-image" src="/images/${encodeURIComponent(picked.image_key)}" alt="">` : ''}
     <div>${escapeHtml(picked.description || '')}</div>
     <div class="meta">${picked.category ? escapeHtml(picked.category) : ''}</div>
   `;
