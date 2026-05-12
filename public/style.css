@@ -1,57 +1,163 @@
+:root {
+  --bg: #f5f5f5;
+  --panel: #ffffff;
+  --text: #1a1a1a;
+  --muted: #888;
+  --border: #e0e0e0;
+  --accent: #1a1a1a;
+  --accent-hover: #333;
+  --soft: #f0f0f0;
+}
+
+* { box-sizing: border-box; }
+
 body {
-  font-family: system-ui, sans-serif;
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1rem;
-  background: #fff7f9;
-  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
 }
-h1 { text-align: center; }
-section {
-  background: white;
-  padding: 1rem;
+
+header {
+  padding: 2rem 1rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 300;
+  font-size: 1.6rem;
+  letter-spacing: 0.3em;
+}
+
+main {
+  max-width: 720px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
   margin-bottom: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-input, textarea {
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.panel-head h2 { margin: 0; }
+
+input, textarea, select {
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
+  padding: 0.7rem 0.8rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
 }
+textarea { min-height: 4rem; resize: vertical; }
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 button {
-  background: #ff6b8a;
+  background: var(--accent);
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-button:hover { background: #ff4f73; }
-#picked {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #ffe6ec;
-  border-radius: 4px;
-  min-height: 2rem;
-}
-li button {
-  margin-top: 0.3rem;
-  margin-right: 0.3rem;
-  padding: 0.3rem 0.6rem;
+  padding: 0.7rem 1.4rem;
   font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
 }
-.edit-btn { background: #6ba3ff; }
-.edit-btn:hover { background: #4f8aff; }
-.delete-btn { background: #999; }
-.delete-btn:hover { background: #777; }
+button:hover { background: var(--accent-hover); }
 
-ul { list-style: none; padding: 0; }
-li {
-  padding: 0.5rem;
-  border-bottom: 1px solid #eee;
+.toggle-btn {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.7rem;
 }
+.toggle-btn:hover {
+  background: var(--soft);
+  color: var(--text);
+}
+
+.pick-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.pick-controls label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.picked-area {
+  padding: 1.5rem;
+  background: var(--soft);
+  text-align: center;
+  font-size: 1.1rem;
+  min-height: 3rem;
+}
+.picked-area strong { display: block; margin-bottom: 0.4rem; }
+.picked-area .meta { color: var(--muted); font-size: 0.8rem; }
+
+ul { list-style: none; padding: 0; margin: 0; }
+.card-list li, .history-list li {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.card-list li:last-child, .history-list li:last-child { border-bottom: none; }
+
+.card-meta {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+.row-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.4rem;
+}
+.row-actions button {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+  font-size: 0.7rem;
+}
+.row-actions button:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.hidden { display: none; }

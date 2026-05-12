@@ -3,31 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>デートプラン</title>
+  <title>Date Cards</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>💝 デートカード</h1>
+  <header>
+    <h1>Date Cards</h1>
+  </header>
 
-  <section>
-    <h2>カードを追加</h2>
-    <form id="add-form">
-      <input type="text" id="title" placeholder="タイトル（例：水族館に行く）" required>
-      <textarea id="description" placeholder="メモ（任意）"></textarea>
-      <button type="submit">追加する</button>
-    </form>
-  </section>
+  <main>
+    <section class="panel">
+      <h2>Add a card</h2>
+      <form id="add-form">
+        <input type="text" id="title" placeholder="タイトル" required>
+        <textarea id="description" placeholder="説明（任意）"></textarea>
+        <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
+        <input type="text" id="created_by" placeholder="追加した人">
+        <button type="submit">追加</button>
+      </form>
+    </section>
 
-  <section>
-    <h2>ランダムピック</h2>
-    <button id="pick-btn">1枚引く！</button>
-    <div id="picked"></div>
-  </section>
+    <section class="panel">
+      <h2>Random pick</h2>
+      <div class="pick-controls">
+        <label>
+          カテゴリで絞り込み:
+          <select id="filter-category"><option value="">すべて</option></select>
+        </label>
+        <label>
+          <input type="checkbox" id="unvisited-only">
+          まだ行っていないカードのみ
+        </label>
+        <button id="pick-btn">引く</button>
+      </div>
+      <div id="picked" class="picked-area">まだ何も引いていません</div>
+    </section>
 
-  <section>
-    <h2>カード一覧</h2>
-    <ul id="card-list"></ul>
-  </section>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Cards</h2>
+        <button class="toggle-btn" data-target="card-list">表示/非表示</button>
+      </div>
+      <ul id="card-list" class="card-list"></ul>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>History</h2>
+        <button class="toggle-btn" data-target="history-list">表示/非表示</button>
+      </div>
+      <ul id="history-list" class="history-list hidden"></ul>
+    </section>
+  </main>
 
   <script src="app.js"></script>
 </body>
