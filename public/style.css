@@ -22,6 +22,14 @@ input, textarea, select { width: 100%; padding: 0.7rem 0.8rem; margin-bottom: 0.
 textarea { min-height: 4rem; resize: vertical; }
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
 
+/* チェックボックス・ラジオは width:100% を打ち消す */
+input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+  padding: 0;
+}
+
 button { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
 button:hover { background: var(--accent-hover); }
 
@@ -29,7 +37,7 @@ button:hover { background: var(--accent-hover); }
 .toggle-btn:hover { background: var(--soft); color: var(--text); }
 
 .pick-controls { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
-.pick-controls label { font-size: 0.85rem; color: var(--muted); }
+.pick-controls label { font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
 .picked-area { padding: 1.5rem; background: var(--soft); text-align: center; font-size: 1.1rem; min-height: 3rem; }
 .picked-area:empty { display: none; }
 .picked-area strong { display: block; margin-bottom: 0.4rem; }
