@@ -13,22 +13,6 @@
 
   <main>
     <section class="panel">
-      <h2>Random pick</h2>
-      <div class="pick-controls">
-        <label>
-          カテゴリで絞り込み:
-          <select id="filter-category"><option value="">すべて</option></select>
-        </label>
-        <label>
-          <input type="checkbox" id="unvisited-only">
-          まだ行っていないカードのみ
-        </label>
-        <button id="pick-btn">引く</button>
-      </div>
-      <div id="picked" class="picked-area">まだ何も引いていません</div>
-    </section>
-
-    <section class="panel">
       <h2>Add a card</h2>
       <form id="add-form">
         <input type="text" id="title" placeholder="タイトル" required>
@@ -42,11 +26,32 @@
     </section>
 
     <section class="panel">
+      <h2>Random pick</h2>
+      <div class="pick-controls">
+        <label>
+          カテゴリで絞り込み:
+          <select id="filter-category"><option value="">すべて</option></select>
+        </label>
+        <label>
+          <input type="checkbox" id="unvisited-only">
+          まだ行っていないカードのみ
+        </label>
+        <button id="pick-btn">引く</button>
+      </div>
+      <div id="picked" class="picked-area">まだ何も引いていません</div>
+      <div id="pick-actions" class="pick-actions hidden">
+        <button id="pick-confirm">決定して履歴に追加</button>
+        <button id="pick-reroll" class="ghost-btn">もう一度引く</button>
+        <button id="pick-cancel" class="ghost-btn">キャンセル</button>
+      </div>
+    </section>
+
+    <section class="panel">
       <div class="panel-head">
         <h2>Cards</h2>
         <button class="toggle-btn" data-target="card-list">表示/非表示</button>
       </div>
-      <ul id="card-list" class="card-list"></ul>
+      <ul id="card-list" class="card-list compact"></ul>
     </section>
 
     <section class="panel">
@@ -57,6 +62,8 @@
       <ul id="history-list" class="history-list hidden"></ul>
     </section>
   </main>
+
+  <!-- 編集モーダル -->
   <div id="edit-modal" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
@@ -81,6 +88,33 @@
       </form>
     </div>
   </div>
+
+  <!-- 詳細モーダル -->
+  <div id="detail-modal" class="modal hidden">
+    <div class="modal-backdrop" data-close-detail></div>
+    <div class="modal-content">
+      <h2 id="detail-title">Card Detail</h2>
+      <img id="detail-image" class="detail-image hidden" alt="">
+      <p id="detail-description" class="detail-text"></p>
+      <div id="detail-meta" class="card-meta"></div>
+
+      <label>メモ</label>
+      <textarea id="detail-note" placeholder="感想や次回への一言など"></textarea>
+      <div class="modal-actions">
+        <button type="button" id="detail-save-note">メモを保存</button>
+      </div>
+
+      <h3 class="sub-heading">訪問履歴</h3>
+      <ul id="detail-history" class="history-list"></ul>
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-btn" data-close-detail>閉じる</button>
+        <button type="button" id="detail-edit-btn">編集</button>
+        <button type="button" id="detail-delete-btn" class="danger-btn">カードを削除</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

@@ -260,3 +260,92 @@ ul { list-style: none; padding: 0; margin: 0; }
   display: block;
 }
 .image-preview.hidden { display: none; }
+
+/* ---------- コンパクト一覧 ---------- */
+.card-list.compact li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0.4rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.card-list.compact li:hover {
+  background: var(--soft);
+}
+.card-list.compact .compact-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  background: var(--soft);
+  flex-shrink: 0;
+}
+.card-list.compact .compact-thumb-placeholder {
+  width: 48px;
+  height: 48px;
+  background: var(--soft);
+  flex-shrink: 0;
+}
+.card-list.compact .compact-body {
+  flex: 1;
+  min-width: 0;
+}
+.card-list.compact .compact-title {
+  font-weight: 500;
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-list.compact .compact-meta {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-top: 0.1rem;
+}
+.card-list.compact .chevron {
+  color: var(--muted);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ---------- ピック決定エリア ---------- */
+.pick-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+.pick-actions.hidden { display: none; }
+
+/* ---------- 詳細モーダル ---------- */
+.detail-image {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--soft);
+  display: block;
+  margin: 0 auto 1rem;
+}
+.detail-text {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+}
+.sub-heading {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.danger-btn {
+  background: transparent;
+  color: #c33;
+  border: 1px solid #c33;
+}
+.danger-btn:hover {
+  background: #c33;
+  color: white;
+}
