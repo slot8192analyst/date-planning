@@ -4,13 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>What's Next</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" sizes="192x192" href="/whats-next-192.jpg">
-  <link rel="icon" type="image/png" sizes="512x512" href="/whats-next-512.jpg">
-  <link rel="apple-touch-icon" href="/apple-touch-whats-next.jpg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/whats-next-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/whats-next-512.png">
+  <link rel="apple-touch-icon" href="/whats-next-192.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#1a1a1a">
-
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <header>
@@ -18,40 +17,44 @@
   </header>
 
   <main>
+    <!-- ランダムピック -->
     <section class="panel">
-      <h2>Random pick</h2>
+      <h2>Random Pick</h2>
       <div class="pick-controls">
-        <label>
-          カテゴリで絞り込み:
-          <select id="filter-category"><option value="">すべて</option></select>
-        </label>
-        <label>
-          <input type="checkbox" id="unvisited-only">
-          まだ行っていないカードのみ
-        </label>
-        <button id="pick-btn">引く</button>
+        <label>タグで絞り込み</label>
+        <div id="filter-tags" class="tag-filter"></div>
+        <label><input type="checkbox" id="filter-mode-and"> すべてのタグを含む (AND)</label>
+        <label><input type="checkbox" id="unvisited-only"> 未訪問のみ</label>
       </div>
-      <div id="picked" class="picked-area">まだ何も引いていません</div>
+      <button id="pick-btn">引く</button>
+      <div id="picked" class="picked-area"></div>
       <div id="pick-actions" class="pick-actions hidden">
-        <button id="pick-confirm">決定して履歴に追加</button>
+        <button id="pick-confirm">決定</button>
         <button id="pick-reroll" class="ghost-btn">もう一度引く</button>
         <button id="pick-cancel" class="ghost-btn">キャンセル</button>
       </div>
     </section>
-  
+
+    <!-- カード追加 -->
     <section class="panel">
-      <h2>Add a card</h2>
-      <form id="add-form">
-        <input type="text" id="title" placeholder="タイトル" required>
-        <textarea id="description" placeholder="説明（任意）"></textarea>
-        <input type="text" id="category" placeholder="カテゴリ / タグ（例: 屋内, 雨の日OK）">
-        <input type="text" id="created_by" placeholder="追加した人">
-        <select id="image_key"></select>
-        <img id="image-preview" class="image-preview hidden" alt="">
-        <button type="submit">追加</button>
-      </form>
+      <div class="panel-head">
+        <h2>Add a Card</h2>
+        <button class="toggle-btn" data-target="add-form-wrapper">表示/非表示</button>
+      </div>
+      <div id="add-form-wrapper">
+        <form id="add-form">
+          <input type="text" id="title" placeholder="タイトル" required>
+          <textarea id="description" placeholder="説明"></textarea>
+          <input type="text" id="category" placeholder="タグ(カンマ区切り 例: カフェ, 雨の日OK)">
+          <input type="text" id="created_by" placeholder="追加した人">
+          <select id="image_key"></select>
+          <img id="image-preview" class="image-preview hidden" alt="">
+          <button type="submit">追加</button>
+        </form>
+      </div>
     </section>
-  
+
+    <!-- カード一覧 -->
     <section class="panel">
       <div class="panel-head">
         <h2>Cards</h2>
@@ -59,13 +62,14 @@
       </div>
       <ul id="card-list" class="card-list compact"></ul>
     </section>
-  
+
+    <!-- 履歴 -->
     <section class="panel">
       <div class="panel-head">
         <h2>History</h2>
         <button class="toggle-btn" data-target="history-list">表示/非表示</button>
       </div>
-      <ul id="history-list" class="history-list hidden"></ul>
+      <ul id="history-list" class="history-list"></ul>
     </section>
   </main>
 
@@ -80,8 +84,8 @@
         <input type="text" id="edit-title" required>
         <label>説明</label>
         <textarea id="edit-description"></textarea>
-        <label>カテゴリ / タグ</label>
-        <input type="text" id="edit-category">
+        <label>タグ(カンマ区切り)</label>
+        <input type="text" id="edit-category" placeholder="例: カフェ, 雨の日OK">
         <label>追加した人</label>
         <input type="text" id="edit-created_by">
         <label>画像</label>
@@ -97,30 +101,15 @@
 
   <!-- 詳細モーダル -->
   <div id="detail-modal" class="modal hidden">
-    <div class="modal-backdrop" data-close-detail></div>
+    <div class="modal-backdrop"></div>
     <div class="modal-content">
-      <h2 id="detail-title">Card Detail</h2>
-      <img id="detail-image" class="detail-image hidden" alt="">
-      <p id="detail-description" class="detail-text"></p>
-      <div id="detail-meta" class="card-meta"></div>
-
-      <label>メモ</label>
-      <textarea id="detail-note" placeholder="感想や次回への一言など"></textarea>
+      <div id="detail-content"></div>
       <div class="modal-actions">
-        <button type="button" id="detail-save-note">メモを保存</button>
-      </div>
-
-      <h3 class="sub-heading">訪問履歴</h3>
-      <ul id="detail-history" class="history-list"></ul>
-
-      <div class="modal-actions">
-        <button type="button" class="ghost-btn" data-close-detail>閉じる</button>
-        <button type="button" id="detail-edit-btn">編集</button>
-        <button type="button" id="detail-delete-btn" class="danger-btn">カードを削除</button>
+        <button type="button" id="detail-close" class="ghost-btn">閉じる</button>
       </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>

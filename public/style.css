@@ -8,344 +8,92 @@
   --accent-hover: #333;
   --soft: #f0f0f0;
 }
-
 * { box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-}
-
-header {
-  padding: 2rem 1rem 1rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  background: var(--panel);
-}
-
-header h1 {
-  margin: 0;
-  font-weight: 300;
-  font-size: 1.8rem;
-  letter-spacing: 0.2em;
-}
-
-main {
-  max-width: 720px;
-  margin: 1.5rem auto;
-  padding: 0 1rem;
-}
-
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.panel h2 {
-  margin: 0 0 1rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.panel-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; letter-spacing: 0.02em; }
+header { padding: 2rem 1rem 1rem; text-align: center; border-bottom: 1px solid var(--border); background: var(--panel); }
+header h1 { margin: 0; font-weight: 300; font-size: 1.8rem; letter-spacing: 0.2em; }
+main { max-width: 720px; margin: 1.5rem auto; padding: 0 1rem; }
+.panel { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1rem; }
+.panel h2 { margin: 0 0 1rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+.panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 .panel-head h2 { margin: 0; }
 
-input, textarea, select {
-  width: 100%;
-  padding: 0.7rem 0.8rem;
-  margin-bottom: 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 0;
-  background: var(--panel);
-  color: var(--text);
-  font-size: 0.95rem;
-  font-family: inherit;
-}
+input, textarea, select { width: 100%; padding: 0.7rem 0.8rem; margin-bottom: 0.6rem; border: 1px solid var(--border); border-radius: 0; background: var(--panel); color: var(--text); font-size: 0.95rem; font-family: inherit; }
 textarea { min-height: 4rem; resize: vertical; }
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: var(--accent);
-}
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
 
-button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 0.7rem 1.4rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.15s;
-}
+button { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
 button:hover { background: var(--accent-hover); }
 
-.toggle-btn {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.7rem;
-}
-.toggle-btn:hover {
-  background: var(--soft);
-  color: var(--text);
-}
+.toggle-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.4rem 0.8rem; font-size: 0.7rem; }
+.toggle-btn:hover { background: var(--soft); color: var(--text); }
 
-.pick-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-.pick-controls label {
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.picked-area {
-  padding: 1.5rem;
-  background: var(--soft);
-  text-align: center;
-  font-size: 1.1rem;
-  min-height: 3rem;
-}
+.pick-controls { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+.pick-controls label { font-size: 0.85rem; color: var(--muted); }
+.picked-area { padding: 1.5rem; background: var(--soft); text-align: center; font-size: 1.1rem; min-height: 3rem; }
+.picked-area:empty { display: none; }
 .picked-area strong { display: block; margin-bottom: 0.4rem; }
 .picked-area .meta { color: var(--muted); font-size: 0.8rem; }
+.pick-actions { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
 
 ul { list-style: none; padding: 0; margin: 0; }
-.card-list li, .history-list li {
-  padding: 0.9rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.card-list li:last-child, .history-list li:last-child { border-bottom: none; }
 
-.card-image {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  margin: 0.5rem 0;
-  background: var(--soft);
-}
-.picked-area .card-image {
-  max-width: 320px;
-  margin: 0.8rem auto;
-  display: block;
-}
+/* コンパクトなカード一覧 */
+.card-list.compact li { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+.card-list.compact li:last-child { border-bottom: none; }
+.card-list.compact li:hover { background: var(--soft); }
+.card-list.compact .thumb { width: 48px; height: 48px; object-fit: cover; background: var(--soft); flex-shrink: 0; }
+.card-list.compact .thumb-placeholder { width: 48px; height: 48px; background: var(--soft); flex-shrink: 0; }
+.card-list.compact .card-main { flex: 1; min-width: 0; }
+.card-list.compact .card-title { font-weight: 500; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-list.compact .chevron { color: var(--muted); font-size: 0.8rem; }
 
-.card-meta {
-  color: var(--muted);
-  font-size: 0.75rem;
-  margin-top: 0.3rem;
-  letter-spacing: 0.05em;
-}
+.history-list li { padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+.history-list li:last-child { border-bottom: none; }
 
-.row-actions {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.4rem;
-}
-.row-actions button {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  padding: 0.3rem 0.7rem;
-  font-size: 0.7rem;
-}
-.row-actions button:hover {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
+.card-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; margin: 0.5rem 0; background: var(--soft); }
+.picked-area .card-image { max-width: 320px; margin: 0.8rem auto; display: block; }
+
+.card-meta { color: var(--muted); font-size: 0.75rem; margin-top: 0.3rem; letter-spacing: 0.05em; }
+.row-actions { margin-top: 0.5rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.row-actions button { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.3rem 0.7rem; font-size: 0.7rem; }
+.row-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* タグチップ表示 */
+.tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
+.tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; background: var(--soft); border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.05em; }
+
+/* タグフィルターボタン群 */
+.tag-filter { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
+.tag-filter:empty::before { content: '(タグが登録されたカードを追加すると表示されます)'; font-size: 0.75rem; color: var(--muted); }
+.tag-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.3rem 0.7rem; font-size: 0.75rem; cursor: pointer; letter-spacing: 0.05em; text-transform: none; }
+.tag-btn:hover { background: var(--soft); color: var(--text); }
+.tag-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.image-preview { width: 120px; height: 120px; object-fit: cover; background: var(--soft); border: 1px solid var(--border); margin: 0.3rem 0 0.6rem; display: block; }
+.image-preview.hidden { display: none; }
 
 .hidden { display: none; }
 
-/* ---------- モーダル ---------- */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
+/* モーダル */
+.modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
 .modal.hidden { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
+.modal-content { position: relative; background: var(--panel); border: 1px solid var(--border); padding: 2rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); animation: modalIn 0.2s ease-out; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.modal-content h2 { margin: 0 0 1.5rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+.modal-content label { display: block; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; margin-top: 0.6rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.ghost-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.ghost-btn:hover { background: var(--soft); color: var(--text); }
+.danger-btn { background: transparent; color: #c44; border: 1px solid #c44; }
+.danger-btn:hover { background: #c44; color: white; }
 
-.modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-}
-
-.modal-content {
-  position: relative;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  padding: 2rem;
-  max-width: 480px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  animation: modalIn 0.2s ease-out;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-content h2 {
-  margin: 0 0 1.5rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.modal-content label {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.3rem;
-  margin-top: 0.6rem;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
-}
-
-.ghost-btn {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-}
-.ghost-btn:hover {
-  background: var(--soft);
-  color: var(--text);
-}
-
-.image-preview {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  background: var(--soft);
-  border: 1px solid var(--border);
-  margin-top: 0.3rem;
-  margin-bottom: 0.6rem;
-  display: block;
-}
-.image-preview.hidden { display: none; }
-
-/* ---------- コンパクト一覧 ---------- */
-.card-list.compact li {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.6rem 0.4rem;
-  cursor: pointer;
-  transition: background 0.1s;
-}
-.card-list.compact li:hover {
-  background: var(--soft);
-}
-.card-list.compact .compact-thumb {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  background: var(--soft);
-  flex-shrink: 0;
-}
-.card-list.compact .compact-thumb-placeholder {
-  width: 48px;
-  height: 48px;
-  background: var(--soft);
-  flex-shrink: 0;
-}
-.card-list.compact .compact-body {
-  flex: 1;
-  min-width: 0;
-}
-.card-list.compact .compact-title {
-  font-weight: 500;
-  font-size: 0.95rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.card-list.compact .compact-meta {
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-  margin-top: 0.1rem;
-}
-.card-list.compact .chevron {
-  color: var(--muted);
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-/* ---------- ピック決定エリア ---------- */
-.pick-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  flex-wrap: wrap;
-}
-.pick-actions.hidden { display: none; }
-
-/* ---------- 詳細モーダル ---------- */
-.detail-image {
-  width: 100%;
-  max-width: 320px;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  background: var(--soft);
-  display: block;
-  margin: 0 auto 1rem;
-}
-.detail-text {
-  margin: 0.5rem 0;
-  white-space: pre-wrap;
-}
-.sub-heading {
-  margin: 1.5rem 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.danger-btn {
-  background: transparent;
-  color: #c33;
-  border: 1px solid #c33;
-}
-.danger-btn:hover {
-  background: #c33;
-  color: white;
-}
+/* 詳細モーダル内の note 表示 */
+.detail-note { margin-top: 1rem; }
+.detail-note textarea { min-height: 5rem; }
+.detail-history { margin-top: 1.2rem; }
+.detail-history h3 { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.5rem; }
+.detail-history-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.detail-history-item:last-child { border-bottom: none; }
+.detail-history-item .date { color: var(--muted); font-size: 0.75rem; }
