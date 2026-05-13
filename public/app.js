@@ -10,6 +10,7 @@ const IMAGE_OPTIONS = [
   { value: '', label: '画像なし' },
   { value: 'cafe.png', label: 'カフェ' },
   { value: 'shopping.png', label: 'ショッピング' },
+  { value: 'wapper.jpg', label: 'ハンバーガー' },
 ];
 
 function populateImageSelect(selectId) {
