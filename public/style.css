@@ -101,6 +101,12 @@ button:hover { background: var(--accent-hover); }
   60%  { opacity: 1; transform: scale(1.02); }
   100% { opacity: 1; transform: scale(1); }
 }
+/* 空状態ガイド */
+.empty-state { padding: 0.5rem 0; }
+.empty-state-icon { font-size: 2rem; margin-bottom: 0.4rem; }
+.empty-state-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
+.empty-state-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
 .pick-actions { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
 
 ul { list-style: none; padding: 0; margin: 0; }

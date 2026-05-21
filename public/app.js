@@ -135,6 +135,46 @@ async function reloadAll() {
   renderCards();
   renderHistory();
   renderTagFilter();
+  renderWelcome();
+}
+
+function renderWelcome() {
+  const area = document.getElementById('picked');
+  // シャッフル中 or すでに何か表示中なら触らない
+  if (isShuffling) return;
+  if (area.innerHTML.trim() !== '') return;
+  if (cardsCache.length === 0) {
+    area.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">🃏</div>
+        <div class="empty-state-title">カードがまだありません</div>
+        <div class="empty-state-desc">「Add a Card」からカードを追加するか、<br>サンプルカードを読み込んでみましょう。</div>
+        <button id="load-samples-btn" class="ghost-btn" style="margin-top:0.8rem;">サンプルカードを追加する</button>
+      </div>
+    `;
+    document.getElementById('load-samples-btn')?.addEventListener('click', loadSampleCards);
+  }
+}
+
+const SAMPLE_CARDS = [
+  { title: 'カフェでひとやすみ', description: '近くのカフェでコーヒーを飲みながらのんびりする', category: 'カフェ, ひとりOK', image_key: 'cafe.png' },
+  { title: 'ショッピングへ行こう', description: 'ウィンドウショッピングや気になるお店を巡る', category: 'ショッピング, 友達と', image_key: 'shopping.png' },
+  { title: 'ハンバーガーランチ', description: 'がっつりハンバーガーでランチタイム', category: 'ランチ, がっつり', image_key: 'wapper.jpg' },
+  { title: '近所を散歩', description: '知らない路地や公園をぶらぶら歩いてみる', category: 'アウトドア, ひとりOK', image_key: '' },
+  { title: '映画を観る', description: '話題の映画や気になっていた作品を観に行く', category: '映画, 友達と', image_key: '' },
+];
+
+async function loadSampleCards() {
+  const btn = document.getElementById('load-samples-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '追加中…'; }
+  for (const card of SAMPLE_CARDS) {
+    await fetch(API_CARDS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...card, created_by: 'サンプル', image_key: card.image_key || null }),
+    });
+  }
+  await reloadAll();
 }
 
 // ---------- カード追加 ----------
@@ -337,9 +377,22 @@ function doPick() {
 
   const area = document.getElementById('picked');
   const actions = document.getElementById('pick-actions');
+  if (cardsCache.length === 0) {
+    area.classList.remove('shuffle-animating');
+    area.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">🃏</div>
+        <div class="empty-state-title">カードがまだありません</div>
+        <div class="empty-state-desc">「Add a Card」からカードを追加してみましょう。</div>
+      </div>
+    `;
+    actions.classList.add('hidden');
+    pendingPick = null;
+    return;
+  }
   if (candidates.length === 0) {
     area.classList.remove('shuffle-animating');
-    area.textContent = '該当するカードがありません';
+    area.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">該当するカードがありません</div><div class="empty-state-desc">フィルター条件を変えて再度お試しください。</div></div>`;
     actions.classList.add('hidden');
     pendingPick = null;
     return;
