@@ -358,6 +358,7 @@ function showPickedResult(picked) {
   // アニメーションクラスを少し後に除去（再利用のため）
   setTimeout(() => area.classList.remove('reveal-result'), 600);
   actions.classList.remove('hidden');
+  launchConfetti();
 }
 
 function doPick() {
@@ -557,7 +558,6 @@ document.getElementById('pick-confirm').addEventListener('click', async () => {
   pendingPick = null;
   document.getElementById('pick-actions').classList.add('hidden');
   document.getElementById('picked').innerHTML = '<div style="color:var(--muted);font-size:0.9rem;">記録しました 🎉</div>';
-  launchConfetti();
   await fetchVisits();
   renderHistory();
 });
