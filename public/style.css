@@ -175,7 +175,7 @@ button:active { transform: translateY(0); box-shadow: none; }
   line-height: 1; letter-spacing: 0; text-transform: none;
   transition: color 0.1s;
 }
-.shortlist-chip-remove:hover { color: white; transform: none; box-shadow: none; background: none; }
+.shortlist-chip-remove:hover { background: none; color: white; transform: none; box-shadow: none; }
 
 .shortlist-hint { font-size: 0.78rem; color: var(--muted); margin: 0.2rem 0 0.6rem; }
 
@@ -187,9 +187,9 @@ button:active { transform: translateY(0); box-shadow: none; }
   transition: color 0.15s, transform 0.12s;
   flex-shrink: 0;
 }
-.shortlist-star-btn:hover { color: var(--text); transform: scale(1.2); box-shadow: none; }
+.shortlist-star-btn:hover { background: none; color: var(--text); transform: scale(1.2); box-shadow: none; }
 .shortlist-star-btn.active { color: #f0a500; }
-.shortlist-star-btn.active:hover { color: #c88000; transform: scale(1.2); }
+.shortlist-star-btn.active:hover { background: none; color: #c88000; transform: scale(1.2); box-shadow: none; }
 
 /* 仕切り線 */
 .pick-divider { text-align: center; font-size: 0.75rem; color: var(--muted); margin: 1rem 0 0.8rem; letter-spacing: 0.05em; }
