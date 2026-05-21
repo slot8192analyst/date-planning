@@ -176,10 +176,10 @@ function openEditModal(id) {
   document.getElementById('edit-created_by').value = card.created_by || '';
   document.getElementById('edit-image_key').value = card.image_key || '';
   updateImagePreview('edit-image_key', 'edit-image-preview');
-  document.getElementById('edit-modal').classList.remove('hidden');
+  document.getElementById('edit-modal').showModal();
 }
 function closeEditModal() {
-  document.getElementById('edit-modal').classList.add('hidden');
+  document.getElementById('edit-modal').close();
 }
 document.getElementById('edit-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -199,22 +199,25 @@ document.getElementById('edit-form').addEventListener('submit', async e => {
   closeEditModal();
   await reloadAll();
   // 詳細モーダルが開いていれば中身を更新
-  if (!document.getElementById('detail-modal').classList.contains('hidden')) {
+  if (document.getElementById('detail-modal').open) {
     openDetailModal(id);
   }
 });
 document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
-document.querySelector('#edit-modal .modal-backdrop').addEventListener('click', closeEditModal);
+// dialog のバックドロップクリックで閉じる
+document.getElementById('edit-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeEditModal();
+});
 
 // ---------- 詳細モーダル ----------
 function openDetailModal(id) {
   const card = cardsCache.find(c => c.id == id);
   if (!card) return;
   renderDetailContent(card);
-  document.getElementById('detail-modal').classList.remove('hidden');
+  document.getElementById('detail-modal').showModal();
 }
 function closeDetailModal() {
-  document.getElementById('detail-modal').classList.add('hidden');
+  document.getElementById('detail-modal').close();
 }
 function renderDetailContent(card) {
   const tags = parseTags(card.category);
@@ -285,7 +288,10 @@ function renderDetailContent(card) {
   });
 }
 document.getElementById('detail-close').addEventListener('click', closeDetailModal);
-document.querySelector('#detail-modal .modal-backdrop').addEventListener('click', closeDetailModal);
+// dialog のバックドロップクリックで閉じる
+document.getElementById('detail-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeDetailModal();
+});
 
 // ---------- 履歴削除 ----------
 async function deleteVisit(id) {
@@ -419,11 +425,12 @@ document.querySelectorAll('.toggle-btn').forEach(btn =>
   })
 );
 
-// ---------- Esc キー ----------
+// ---------- Esc キー（dialog は標準で Esc 対応済み。追加で edit も閉じる） ----------
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    closeEditModal();
-    closeDetailModal();
+    // dialog.close() は Esc で自動発火するが、念のため明示的に呼ぶ
+    if (document.getElementById('edit-modal').open) closeEditModal();
+    if (document.getElementById('detail-modal').open) closeDetailModal();
   }
 });
 

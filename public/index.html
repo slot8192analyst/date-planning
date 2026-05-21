@@ -26,7 +26,7 @@
         <label><input type="checkbox" id="filter-mode-and"> すべてのタグを含む (AND)</label>
         <label><input type="checkbox" id="unvisited-only"> 未訪問のみ</label>
       </div>
-      <button id="pick-btn">引く</button>
+      <button id="pick-btn" class="pick-primary-btn">引く</button>
       <div id="picked" class="picked-area"></div>
       <div id="pick-actions" class="pick-actions hidden">
         <button id="pick-confirm">決定</button>
@@ -39,9 +39,11 @@
     <section class="panel">
       <div class="panel-head">
         <h2>Add a Card</h2>
-        <button class="toggle-btn" data-target="add-form-wrapper">表示/非表示</button>
+        <button class="toggle-btn add-card-toggle" data-target="add-form-wrapper" aria-expanded="false">
+          ＋ カードを追加
+        </button>
       </div>
-      <div id="add-form-wrapper">
+      <div id="add-form-wrapper" class="hidden">
         <form id="add-form">
           <input type="text" id="title" placeholder="タイトル" required>
           <textarea id="description" placeholder="説明"></textarea>
@@ -58,7 +60,7 @@
     <section class="panel">
       <div class="panel-head">
         <h2>Cards</h2>
-        <button class="toggle-btn" data-target="card-list">表示/非表示</button>
+        <button class="toggle-btn" data-target="card-list" aria-expanded="true">表示/非表示</button>
       </div>
       <ul id="card-list" class="card-list compact"></ul>
     </section>
@@ -67,15 +69,14 @@
     <section class="panel">
       <div class="panel-head">
         <h2>History</h2>
-        <button class="toggle-btn" data-target="history-list">表示/非表示</button>
+        <button class="toggle-btn" data-target="history-list" aria-expanded="true">表示/非表示</button>
       </div>
       <ul id="history-list" class="history-list"></ul>
     </section>
   </main>
 
-  <!-- 編集モーダル -->
-  <div id="edit-modal" class="modal hidden">
-    <div class="modal-backdrop"></div>
+  <!-- 編集モーダル（dialog要素） -->
+  <dialog id="edit-modal" class="modal-dialog">
     <div class="modal-content">
       <h2>Edit Card</h2>
       <form id="edit-form">
@@ -97,18 +98,17 @@
         </div>
       </form>
     </div>
-  </div>
+  </dialog>
 
-  <!-- 詳細モーダル -->
-  <div id="detail-modal" class="modal hidden">
-    <div class="modal-backdrop"></div>
+  <!-- 詳細モーダル（dialog要素） -->
+  <dialog id="detail-modal" class="modal-dialog">
     <div class="modal-content">
       <div id="detail-content"></div>
       <div class="modal-actions">
         <button type="button" id="detail-close" class="ghost-btn">閉じる</button>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <script src="/app.js"></script>
 </body>
