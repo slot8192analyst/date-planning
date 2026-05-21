@@ -460,62 +460,61 @@ const CONFETTI_SHAPES = ['rect', 'circle', 'ribbon'];
 
 function launchConfetti() {
   const canvas = document.getElementById('confetti-canvas');
-  if (!canvas) return; // 念のため null ガード
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  // dpr 対応（Retina/高解像度ディスプレイでシャープに）
+  // CSS の position:fixed に任せてサイズを取る（style上書き禁止）
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // dpr 対応：canvas の内部解像度だけ上げる。style サイズは CSS に任せる
   const dpr = window.devicePixelRatio || 1;
-  const W   = window.innerWidth;
-  const H   = window.innerHeight;
-  canvas.width         = W * dpr;
-  canvas.height        = H * dpr;
-  canvas.style.width   = W + 'px';
-  canvas.style.height  = H + 'px';
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
   ctx.scale(dpr, dpr);
+
   canvas.style.display = 'block';
 
   const PARTICLE_COUNT = 140;
   const GRAVITY        = 0.45;
   const particles = [];
 
-  // 左右から同時に打ち上げ
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const fromLeft = i < PARTICLE_COUNT / 2;
     const shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
     particles.push({
-      x:      fromLeft ? -10 : W + 10,
-      y:      H * (0.5 + Math.random() * 0.4),  // 画面下半分から発射
-      vx:     fromLeft
-                ? 6  + Math.random() * 9          // 右方向
-                : -(6 + Math.random() * 9),        // 左方向
-      vy:     -(10 + Math.random() * 14),          // 上向き
-      color:  CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      x:     fromLeft ? -10 : W + 10,
+      y:     H * (0.5 + Math.random() * 0.4),
+      vx:    fromLeft ? 6 + Math.random() * 9 : -(6 + Math.random() * 9),
+      vy:    -(10 + Math.random() * 14),
+      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
       shape,
-      w:      shape === 'ribbon' ? 3  + Math.random() * 3  : 7 + Math.random() * 7,
-      h:      shape === 'ribbon' ? 14 + Math.random() * 10 : 7 + Math.random() * 7,
-      angle:  Math.random() * Math.PI * 2,
-      spin:   (Math.random() - 0.5) * 0.25,
+      w:     shape === 'ribbon' ? 3  + Math.random() * 3  : 7 + Math.random() * 7,
+      h:     shape === 'ribbon' ? 14 + Math.random() * 10 : 7 + Math.random() * 7,
+      angle: Math.random() * Math.PI * 2,
+      spin:  (Math.random() - 0.5) * 0.25,
       opacity: 1,
     });
   }
 
   let frame;
-  const DURATION = 3500; // ms
+  const DURATION = 3500;
   const start = performance.now();
 
   function draw(now) {
-    const elapsed = now - start;
-    const progress = elapsed / DURATION; // 0→1
+    const elapsed  = now - start;
+    const progress = elapsed / DURATION;
+
+    // clearRect は論理ピクセル（dpr scale 後の座標系）で OK
     ctx.clearRect(0, 0, W, H);
 
     let alive = false;
     for (const p of particles) {
-      p.x      += p.vx;
-      p.vy     += GRAVITY;
-      p.y      += p.vy;
-      p.angle  += p.spin;
-      p.vx     *= 0.985; // 空気抵抗
-      // 後半フェードアウト
+      p.x     += p.vx;
+      p.vy    += GRAVITY;
+      p.y     += p.vy;
+      p.angle += p.spin;
+      p.vx    *= 0.985;
       p.opacity = progress < 0.65 ? 1 : 1 - (progress - 0.65) / 0.35;
 
       if (p.y < H + 60) alive = true;
@@ -530,8 +529,6 @@ function launchConfetti() {
         ctx.beginPath();
         ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
         ctx.fill();
-      } else if (p.shape === 'ribbon') {
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
       } else {
         ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
       }
@@ -542,7 +539,7 @@ function launchConfetti() {
       frame = requestAnimationFrame(draw);
     } else {
       cancelAnimationFrame(frame);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, W, H);
       canvas.style.display = 'none';
     }
   }
