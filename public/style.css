@@ -14,7 +14,7 @@ header { padding: 2rem 1rem 1rem; text-align: center; border-bottom: 1px solid v
 header h1 { margin: 0; font-weight: 300; font-size: 1.8rem; letter-spacing: 0.2em; }
 main { max-width: 720px; margin: 1.5rem auto; padding: 0 1rem; }
 .panel { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1rem; }
-.panel h2 { margin: 0 0 1rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+.panel h2 { margin: 0 0 1rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 .panel-head h2 { margin: 0; }
 
@@ -30,8 +30,9 @@ input[type="checkbox"], input[type="radio"] {
   padding: 0;
 }
 
-button { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
-button:hover { background: var(--accent-hover); }
+button { background: var(--accent); color: white; border: none; padding: 0.7rem 1.4rem; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.15s, transform 0.12s, box-shadow 0.12s; }
+button:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+button:active { transform: translateY(0); box-shadow: none; }
 
 .toggle-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.4rem 0.8rem; font-size: 0.7rem; }
 .toggle-btn:hover { background: var(--soft); color: var(--text); }
@@ -151,7 +152,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 /* タグチップ表示 */
 .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
-.tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; background: var(--soft); border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.05em; }
+.tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; background: #e8e8e8; border: 1px solid #ccc; color: #444; letter-spacing: 0.03em; font-weight: 500; }
 
 /* タグフィルターボタン群 */
 .tag-filter { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.6rem; }
@@ -171,7 +172,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
 .modal-content { position: relative; background: var(--panel); border: 1px solid var(--border); padding: 2rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); animation: modalIn 0.2s ease-out; }
 @keyframes modalIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-.modal-content h2 { margin: 0 0 1.5rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+.modal-content h2 { margin: 0 0 1.5rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .modal-content label { display: block; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; margin-top: 0.6rem; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
 .ghost-btn { background: transparent; color: var(--muted); border: 1px solid var(--border); }
@@ -183,7 +184,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 .detail-note { margin-top: 1rem; }
 .detail-note textarea { min-height: 5rem; }
 .detail-history { margin-top: 1.2rem; }
-.detail-history h3 { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.5rem; }
+.detail-history h3 { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.5rem; }
 .detail-history-item { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
 .detail-history-item:last-child { border-bottom: none; }
 .detail-history-item .date { color: var(--muted); font-size: 0.75rem; }
