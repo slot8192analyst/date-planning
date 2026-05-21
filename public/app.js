@@ -4,6 +4,7 @@ const API_VISITS = '/api/visits';
 let cardsCache = [];
 let visitsCache = [];
 let pendingPick = null;
+let shortlist = new Set(); // card.id のセット
 
 // 画像オプション(ここに追記すれば選択肢が増える)
 const IMAGE_OPTIONS = [
@@ -76,6 +77,7 @@ function renderCards() {
     const thumb = card.image_key
       ? `<img class="thumb" src="/images/${encodeURIComponent(card.image_key)}" alt="">`
       : `<div class="thumb-placeholder"></div>`;
+    const inShortlist = shortlist.has(card.id);
     li.innerHTML = `
       ${thumb}
       <div class="card-main">
@@ -84,11 +86,120 @@ function renderCards() {
           ? `<div class="tags">${parseTags(card.category).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>`
           : ''}
       </div>
+      <button class="shortlist-star-btn ${inShortlist ? 'active' : ''}" data-id="${card.id}" title="候補に追加" aria-label="候補に追加">${inShortlist ? '★' : '☆'}</button>
       <span class="chevron">›</span>
     `;
+    // ☆ ボタン：クリックはカード詳細を開かない
+    li.querySelector('.shortlist-star-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      toggleShortlist(card.id);
+    });
     li.addEventListener('click', () => openDetailModal(card.id));
     list.appendChild(li);
   });
+}
+
+// ---------- 候補リスト ----------
+function toggleShortlist(id) {
+  if (shortlist.has(id)) {
+    shortlist.delete(id);
+  } else {
+    shortlist.add(id);
+  }
+  renderCards();
+  renderShortlist();
+}
+
+function renderShortlist() {
+  const chips     = document.getElementById('shortlist-chips');
+  const countEl   = document.getElementById('shortlist-count');
+  const pickBtn   = document.getElementById('shortlist-pick-btn');
+  const clearBtn  = document.getElementById('shortlist-clear-btn');
+  const hint      = document.getElementById('shortlist-hint');
+
+  // shortlist に存在するカードだけ（削除済みカードを除外）
+  const items = [...shortlist].map(id => cardsCache.find(c => c.id === id)).filter(Boolean);
+  // キャッシュと同期（削除済みを除去）
+  shortlist = new Set(items.map(c => c.id));
+
+  countEl.textContent = items.length;
+
+  if (items.length === 0) {
+    chips.innerHTML = '';
+    pickBtn.classList.add('hidden');
+    clearBtn.classList.add('hidden');
+    hint.classList.remove('hidden');
+    return;
+  }
+
+  hint.classList.add('hidden');
+  pickBtn.classList.remove('hidden');
+  clearBtn.classList.remove('hidden');
+
+  chips.innerHTML = items.map(card => `
+    <span class="shortlist-chip" data-id="${card.id}">
+      ${escapeHtml(card.title)}
+      <button class="shortlist-chip-remove" data-id="${card.id}" aria-label="候補から外す">✕</button>
+    </span>
+  `).join('');
+
+  chips.querySelectorAll('.shortlist-chip-remove').forEach(btn => {
+    btn.addEventListener('click', () => toggleShortlist(Number(btn.dataset.id)));
+  });
+}
+
+document.getElementById('shortlist-clear-btn').addEventListener('click', () => {
+  shortlist.clear();
+  renderCards();
+  renderShortlist();
+});
+
+document.getElementById('shortlist-pick-btn').addEventListener('click', () => {
+  doPickFromShortlist();
+});
+
+function doPickFromShortlist() {
+  if (isShuffling) return;
+  const items = [...shortlist].map(id => cardsCache.find(c => c.id === id)).filter(Boolean);
+  if (items.length === 0) return;
+
+  const picked = items[Math.floor(Math.random() * items.length)];
+  pendingPick = picked;
+
+  const area    = document.getElementById('picked');
+  const actions = document.getElementById('pick-actions');
+
+  isShuffling = true;
+  actions.classList.add('hidden');
+  area.classList.add('shuffle-animating');
+
+  const TOTAL_MS   = 3500;
+  const FAST_PHASE = 1200;
+  const MID_PHASE  = 1500;
+  let elapsed = 0;
+
+  function getInterval() {
+    if (elapsed < FAST_PHASE)              return 80;
+    if (elapsed < FAST_PHASE + MID_PHASE)  return 180;
+    return 350;
+  }
+  function showRandom() {
+    const c = items[Math.floor(Math.random() * items.length)];
+    area.innerHTML = `<span class="shuffle-card-title">${escapeHtml(c.title)}</span>`;
+  }
+  function tick() {
+    if (elapsed >= TOTAL_MS) {
+      isShuffling = false;
+      showPickedResult(picked);
+      return;
+    }
+    showRandom();
+    const interval = getInterval();
+    elapsed += interval;
+    setTimeout(tick, interval);
+  }
+  showRandom();
+  setTimeout(tick, getInterval());
 }
 
 function renderHistory() {
@@ -135,6 +246,7 @@ async function reloadAll() {
   renderCards();
   renderHistory();
   renderTagFilter();
+  renderShortlist();
   renderWelcome();
 }
 

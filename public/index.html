@@ -37,6 +37,22 @@
     <!-- ランダムピック -->
     <section class="panel">
       <h2>Random Pick</h2>
+
+      <!-- 候補リスト -->
+      <div id="shortlist-section">
+        <div class="shortlist-header">
+          <span class="shortlist-label">候補リスト <span id="shortlist-count">0</span></span>
+          <div class="shortlist-header-actions">
+            <button id="shortlist-pick-btn" class="shortlist-pick-btn hidden">候補から引く</button>
+            <button id="shortlist-clear-btn" class="ghost-btn shortlist-clear-btn hidden">クリア</button>
+          </div>
+        </div>
+        <div id="shortlist-chips" class="shortlist-chips"></div>
+        <p id="shortlist-hint" class="shortlist-hint">カード一覧の ☆ を押して候補に追加できます</p>
+      </div>
+
+      <div class="pick-divider">— または全カードからランダムに —</div>
+
       <div class="pick-controls">
         <label>タグで絞り込み</label>
         <div id="filter-tags" class="tag-filter"></div>
