@@ -125,6 +125,17 @@ button:active { transform: translateY(0); box-shadow: none; }
 .empty-state-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
 .empty-state-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
+/* 紙吹雪 Canvas */
+#confetti-canvas {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;   /* クリックを下の要素へ透過 */
+  z-index: 9999;
+}
+
 .pick-actions { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
 
 ul { list-style: none; padding: 0; margin: 0; }
