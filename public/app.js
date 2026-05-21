@@ -451,6 +451,96 @@ function doPick() {
 document.getElementById('pick-btn').addEventListener('click', doPick);
 document.getElementById('pick-reroll').addEventListener('click', doPick);
 
+// ---------- 紙吹雪 ----------
+const CONFETTI_COLORS = [
+  '#ff6b6b','#ffa94d','#ffe066','#69db7c',
+  '#4dabf7','#cc5de8','#f783ac','#ffffff',
+];
+const CONFETTI_SHAPES = ['rect', 'circle', 'ribbon'];
+
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.style.display = 'block';
+
+  const PARTICLE_COUNT = 140;
+  const GRAVITY        = 0.45;
+  const particles = [];
+
+  // 左右から同時に打ち上げ
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const fromLeft = i < PARTICLE_COUNT / 2;
+    const shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
+    particles.push({
+      x:      fromLeft ? -10 : canvas.width + 10,
+      y:      canvas.height * (0.5 + Math.random() * 0.4),  // 画面下半分から発射
+      vx:     fromLeft
+                ? 6  + Math.random() * 9          // 右方向
+                : -(6 + Math.random() * 9),        // 左方向
+      vy:     -(10 + Math.random() * 14),          // 上向き
+      color:  CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      shape,
+      w:      shape === 'ribbon' ? 3  + Math.random() * 3  : 7 + Math.random() * 7,
+      h:      shape === 'ribbon' ? 14 + Math.random() * 10 : 7 + Math.random() * 7,
+      angle:  Math.random() * Math.PI * 2,
+      spin:   (Math.random() - 0.5) * 0.25,
+      opacity: 1,
+    });
+  }
+
+  let frame;
+  const DURATION = 3500; // ms
+  const start = performance.now();
+
+  function draw(now) {
+    const elapsed = now - start;
+    const progress = elapsed / DURATION; // 0→1
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let alive = false;
+    for (const p of particles) {
+      p.x      += p.vx;
+      p.vy     += GRAVITY;
+      p.y      += p.vy;
+      p.angle  += p.spin;
+      p.vx     *= 0.985; // 空気抵抗
+      // 後半フェードアウト
+      p.opacity = progress < 0.65 ? 1 : 1 - (progress - 0.65) / 0.35;
+
+      if (p.y < canvas.height + 60) alive = true;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.shape === 'ribbon') {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      } else {
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      }
+      ctx.restore();
+    }
+
+    if (alive && elapsed < DURATION) {
+      frame = requestAnimationFrame(draw);
+    } else {
+      cancelAnimationFrame(frame);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = 'none';
+    }
+  }
+
+  frame = requestAnimationFrame(draw);
+}
+
 document.getElementById('pick-confirm').addEventListener('click', async () => {
   if (!pendingPick) return;
   await fetch(API_VISITS, {
@@ -460,7 +550,8 @@ document.getElementById('pick-confirm').addEventListener('click', async () => {
   });
   pendingPick = null;
   document.getElementById('pick-actions').classList.add('hidden');
-  document.getElementById('picked').innerHTML = '<div style="color:var(--muted);font-size:0.9rem;">記録しました</div>';
+  document.getElementById('picked').innerHTML = '<div style="color:var(--muted);font-size:0.9rem;">記録しました 🎉</div>';
+  launchConfetti();
   await fetchVisits();
   renderHistory();
 });
