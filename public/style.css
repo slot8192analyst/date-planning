@@ -38,6 +38,33 @@ button:hover { background: var(--accent-hover); }
 
 .pick-controls { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
 .pick-controls label { font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
+
+/* 「引く」ボタン専用スタイル */
+.pick-primary-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-align: center;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  margin-bottom: 0.8rem;
+}
+.pick-primary-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+.pick-primary-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
 .picked-area { padding: 1.5rem; background: var(--soft); text-align: center; font-size: 1.1rem; min-height: 3rem; transition: background 0.3s; }
 .picked-area:empty { display: none; }
 .picked-area strong { display: block; margin-bottom: 0.4rem; }
