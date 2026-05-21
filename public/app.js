@@ -413,11 +413,17 @@ document.getElementById('pick-cancel').addEventListener('click', () => {
 });
 
 // ---------- トグル ----------
-document.querySelectorAll('.toggle-btn').forEach(btn =>
+document.querySelectorAll('.toggle-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.getElementById(btn.dataset.target).classList.toggle('hidden');
-  })
-);
+    const target = document.getElementById(btn.dataset.target);
+    const isHidden = target.classList.toggle('hidden');
+    btn.setAttribute('aria-expanded', String(!isHidden));
+    // add-card-toggle のラベル切り替え
+    if (btn.classList.contains('add-card-toggle')) {
+      btn.textContent = isHidden ? '＋ カードを追加' : '✕ 閉じる';
+    }
+  });
+});
 
 // ---------- Esc キー ----------
 document.addEventListener('keydown', e => {
