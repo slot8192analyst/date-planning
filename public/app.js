@@ -295,7 +295,28 @@ async function deleteVisit(id) {
 }
 
 // ---------- ピック ----------
+let isShuffling = false;
+
+function showPickedResult(picked) {
+  const area = document.getElementById('picked');
+  const actions = document.getElementById('pick-actions');
+  const tags = parseTags(picked.category);
+  area.innerHTML = `
+    <strong>${escapeHtml(picked.title)}</strong>
+    ${picked.image_key ? `<img class="card-image" src="/images/${encodeURIComponent(picked.image_key)}" alt="">` : ''}
+    <div>${escapeHtml(picked.description || '')}</div>
+    ${tags.length ? `<div class="tags" style="justify-content:center;">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+  `;
+  area.classList.remove('shuffle-animating');
+  area.classList.add('reveal-result');
+  // アニメーションクラスを少し後に除去（再利用のため）
+  setTimeout(() => area.classList.remove('reveal-result'), 600);
+  actions.classList.remove('hidden');
+}
+
 function doPick() {
+  if (isShuffling) return;
+
   const selectedTags = getSelectedTags();
   const andMode = document.getElementById('filter-mode-and').checked;
   const unvisitedOnly = document.getElementById('unvisited-only').checked;
@@ -317,21 +338,55 @@ function doPick() {
   const area = document.getElementById('picked');
   const actions = document.getElementById('pick-actions');
   if (candidates.length === 0) {
+    area.classList.remove('shuffle-animating');
     area.textContent = '該当するカードがありません';
     actions.classList.add('hidden');
     pendingPick = null;
     return;
   }
+
+  // 最終的に引くカードを先に決める
   const picked = candidates[Math.floor(Math.random() * candidates.length)];
   pendingPick = picked;
-  const tags = parseTags(picked.category);
-  area.innerHTML = `
-    <strong>${escapeHtml(picked.title)}</strong>
-    ${picked.image_key ? `<img class="card-image" src="/images/${encodeURIComponent(picked.image_key)}" alt="">` : ''}
-    <div>${escapeHtml(picked.description || '')}</div>
-    ${tags.length ? `<div class="tags" style="justify-content:center;">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
-  `;
-  actions.classList.remove('hidden');
+
+  // --- シャッフル演出 開始 ---
+  isShuffling = true;
+  actions.classList.add('hidden');
+  area.classList.add('shuffle-animating');
+
+  const TOTAL_MS   = 3500; // 3.5 秒
+  const FAST_PHASE = 1200; // 最初は速い
+  const MID_PHASE  = 1500; // 中速
+  // 残り 800ms はゆっくり
+
+  let elapsed = 0;
+
+  function getInterval() {
+    if (elapsed < FAST_PHASE)           return 80;
+    if (elapsed < FAST_PHASE + MID_PHASE) return 180;
+    return 350;
+  }
+
+  function showRandomCard() {
+    const c = candidates[Math.floor(Math.random() * candidates.length)];
+    area.innerHTML = `<span class="shuffle-card-title">${escapeHtml(c.title)}</span>`;
+  }
+
+  function tick() {
+    if (elapsed >= TOTAL_MS) {
+      // シャッフル終了 → 結果表示
+      isShuffling = false;
+      showPickedResult(picked);
+      return;
+    }
+    showRandomCard();
+    const interval = getInterval();
+    elapsed += interval;
+    setTimeout(tick, interval);
+  }
+
+  showRandomCard();
+  setTimeout(tick, getInterval());
 }
 
 document.getElementById('pick-btn').addEventListener('click', doPick);
