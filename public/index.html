@@ -127,9 +127,9 @@
     </div>
   </dialog>
 
-  <script src="/app.js"></script>
+  <!-- 紙吹雪用 Canvas（script より前に配置して DOM を確保） -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-  <!-- 紙吹雪用 Canvas（クリック透過・最前面） -->
-  <canvas id="confetti-canvas"></canvas>
+  <script src="/app.js"></script>
 </body>
 </html>

@@ -460,9 +460,18 @@ const CONFETTI_SHAPES = ['rect', 'circle', 'ribbon'];
 
 function launchConfetti() {
   const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return; // 念のため null ガード
   const ctx = canvas.getContext('2d');
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
+
+  // dpr 対応（Retina/高解像度ディスプレイでシャープに）
+  const dpr = window.devicePixelRatio || 1;
+  const W   = window.innerWidth;
+  const H   = window.innerHeight;
+  canvas.width         = W * dpr;
+  canvas.height        = H * dpr;
+  canvas.style.width   = W + 'px';
+  canvas.style.height  = H + 'px';
+  ctx.scale(dpr, dpr);
   canvas.style.display = 'block';
 
   const PARTICLE_COUNT = 140;
@@ -474,8 +483,8 @@ function launchConfetti() {
     const fromLeft = i < PARTICLE_COUNT / 2;
     const shape = CONFETTI_SHAPES[Math.floor(Math.random() * CONFETTI_SHAPES.length)];
     particles.push({
-      x:      fromLeft ? -10 : canvas.width + 10,
-      y:      canvas.height * (0.5 + Math.random() * 0.4),  // 画面下半分から発射
+      x:      fromLeft ? -10 : W + 10,
+      y:      H * (0.5 + Math.random() * 0.4),  // 画面下半分から発射
       vx:     fromLeft
                 ? 6  + Math.random() * 9          // 右方向
                 : -(6 + Math.random() * 9),        // 左方向
@@ -497,7 +506,7 @@ function launchConfetti() {
   function draw(now) {
     const elapsed = now - start;
     const progress = elapsed / DURATION; // 0→1
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, W, H);
 
     let alive = false;
     for (const p of particles) {
@@ -509,7 +518,7 @@ function launchConfetti() {
       // 後半フェードアウト
       p.opacity = progress < 0.65 ? 1 : 1 - (progress - 0.65) / 0.35;
 
-      if (p.y < canvas.height + 60) alive = true;
+      if (p.y < H + 60) alive = true;
 
       ctx.save();
       ctx.globalAlpha = Math.max(0, p.opacity);
